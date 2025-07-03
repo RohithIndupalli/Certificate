@@ -309,7 +309,7 @@ function Certificates() {
     const imageData = canvas.toDataURL("image/png");
 
     try {
-      await axios.post("http://localhost:3001/send-email", {
+      await axios.post("https://certificate-0a2g.onrender.com/send-email", {
         email,
         name,
         eventTitle,

@@ -128,7 +128,7 @@ function Login() {
     setError(null);
 
     try {
-      const result = await axios.post("http://localhost:3001/login", {
+      const result = await axios.post("https://certificate-0a2g.onrender.com/login", {
         email,
         password,
       });

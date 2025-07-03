@@ -149,7 +149,7 @@ function Signup() {
     setError(null);
 
     try {
-      const result = await axios.post("http://localhost:3001/register", {
+      const result = await axios.post("https://certificate-0a2g.onrender.com/register", {
         name,
         email,
         password,
