@@ -6,7 +6,7 @@ const cors = require("cors");
 const nodemailer = require("nodemailer");
 const EmployeeModel=require('./models/Employee')
 const app = express();
-const mongoUri = "mongodb://localhost:27017/employee";
+const mongoUri = "mongodb+srv://anuragbabaojha:Anurag%409262@cluster0.61tqh.mongodb.net/employee";
 
 
 
