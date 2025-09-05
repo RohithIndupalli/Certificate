@@ -113,7 +113,7 @@ const app = express();
 app.use(express.json({ limit: "50mb" }));
 // 🟢 Enable CORS here
 app.use(cors({
-  origin: "https://certificate-0a2g.onrender.com", // OR replace with "https://your-frontend-url.com"
+  origin: "https://certificate-1-x3tb.onrender.com", // OR replace with "https://your-frontend-url.com"
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"]
 }));
