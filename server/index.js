@@ -183,9 +183,21 @@ app.post("/login", (req, res) => {
   const { email, password } = req.body;
   EmployeeModel.findOne({ email })
     .then(user => {
-      if (!user) return res.json("No record existed");
-      if (user.password !== password) return res.json("The password is incorrect");
-      res.json("Success");
+      if (!user) return res.status(401).json({ error: "No record existed" });
+      if (user.password !== password) return res.status(401).json({ error: "The password is incorrect" });
+      
+      // Return user details (excluding password) for client-side use
+      const userDetails = {
+        id: user._id,
+        name: user.name,
+        email: user.email
+      };
+      
+      res.json({ 
+        success: true, 
+        message: "Login successful", 
+        user: userDetails 
+      });
     })
     .catch(err => {
       console.error("❌ Error finding user:", err);

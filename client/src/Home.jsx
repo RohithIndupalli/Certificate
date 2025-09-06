@@ -1,13 +1,26 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaFileCsv, FaImage, FaFileSignature, FaArrowRight } from "react-icons/fa";
+import { FaFileCsv, FaImage, FaFileSignature, FaArrowRight, FaUser } from "react-icons/fa";
 
 function Home() {
   const [participants, setParticipants] = useState([]);
   const [template, setTemplate] = useState(null);
   const [eventTitle, setEventTitle] = useState("");
+  const [user, setUser] = useState(null);
   const navigate = useNavigate(); // Hook for navigation
+  
+  // Check if user is logged in
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('user');
+    if (loggedInUser) {
+      const foundUser = JSON.parse(loggedInUser);
+      setUser(foundUser);
+    } else {
+      // Redirect to login if not logged in
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const handleCSVUpload = (e) => {
     const file = e.target.files[0];
@@ -38,6 +51,13 @@ function Home() {
     navigate("/certificates", { state: { participants, template, eventTitle } });
   };
 
+  const handleLogout = () => {
+    // Clear user data from localStorage
+    localStorage.removeItem('user');
+    // Redirect to login page
+    navigate('/login');
+  };
+
   return (
     <div
       className="d-flex flex-column justify-content-center align-items-center min-vh-100"
@@ -48,6 +68,26 @@ function Home() {
         padding: "20px"
       }}
     >
+      {/* User welcome section */}
+      {user && (
+        <div className="mb-4 p-3 bg-white rounded shadow-sm w-100" style={{ maxWidth: "800px" }}>
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <h4 className="mb-2">
+                <FaUser className="me-2" style={{ color: "#3a6ea5" }} />
+                Welcome, {user.name}!
+              </h4>
+              <p className="text-muted mb-0">Logged in as: {user.email}</p>
+            </div>
+            <button 
+              onClick={handleLogout}
+              className="btn btn-outline-danger"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      )}
       {/* Title Section */}
       <h2 className="fw-bold text-center mb-4" style={{ color: "#333" }}>
         <FaFileSignature className="me-2" /> Online Certificate Generator

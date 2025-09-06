@@ -128,15 +128,32 @@ function Login() {
     setError(null);
 
     try {
-      const result = await axios.post("https://certificate-0a2g.onrender.com/login", {
+      const response = await axios.post("https://certificate-0a2g.onrender.com/login", {
         email,
         password,
       });
-      console.log(result);
-      navigate("/Home");
+      
+      // Check if the response indicates success
+      if (response.data && response.data.success) {
+        console.log("Login successful:", response.data);
+        
+        // Store user details in localStorage for use across the app
+        if (response.data.user) {
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        }
+        
+        // Redirect to Home page
+        navigate("/Home");
+      } else {
+        // Handle case where server returns a 200 status but with error message
+        console.error("Login failed:", response.data);
+        setError("Invalid email or password. Please try again.");
+      }
     } catch (err) {
-      console.error(err);
-      setError("Invalid email or password. Please try again.");
+      // Handle HTTP errors (401, 500, etc.)
+      console.error("Login error:", err);
+      const errorMessage = err.response?.data?.error || "Invalid email or password. Please try again.";
+      setError(errorMessage);
     }
   };
 
