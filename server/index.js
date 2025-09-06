@@ -108,6 +108,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const EmployeeModel = require("./models/Employee");
+const CertificateHistoryModel = require("./models/CertificateHistory");
 
 const app = express();
 app.use(express.json({ limit: "50mb" }));
@@ -206,11 +207,41 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/send-email", (req, res) => {
-  const { email, name, eventTitle, imageData } = req.body;
+  const { email, name, eventTitle, imageData, userId } = req.body;
   if (!email || !imageData) {
     return res.status(400).json({ message: "Email or certificate data is missing" });
   }
+  
+  // Store certificate history
+  if (userId) {
+    const historyEntry = new CertificateHistoryModel({
+      userId,
+      recipientName: name,
+      recipientEmail: email,
+      eventTitle
+    });
+    
+    historyEntry.save()
+      .then(() => console.log("✅ Certificate history saved"))
+      .catch(err => console.error("❌ Error saving certificate history:", err));
+  }
+  
   sendCertificateEmail(email, name, eventTitle, imageData, res);
+});
+
+// Get certificate history for a user
+app.get("/certificate-history/:userId", (req, res) => {
+  const { userId } = req.params;
+  
+  CertificateHistoryModel.find({ userId })
+    .sort({ sentDate: -1 }) // Sort by most recent first
+    .then(history => {
+      res.json(history);
+    })
+    .catch(err => {
+      console.error("❌ Error fetching certificate history:", err);
+      res.status(500).json({ error: err.message });
+    });
 });
 
 // Start server

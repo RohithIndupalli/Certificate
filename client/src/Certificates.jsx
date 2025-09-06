@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import axios from "axios";
 import { FaHome } from "react-icons/fa";
+import { isAuthenticated, getUserData } from "./utils/authUtils";
 
 function Certificates() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { participants, template, eventTitle } = location.state || {
     participants: [],
     template: null,
@@ -15,6 +17,19 @@ function Certificates() {
   const [emailCount, setEmailCount] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState(null);
+  
+  useEffect(() => {
+    // Check if user is authenticated
+    if (!isAuthenticated()) {
+      navigate('/login');
+      return;
+    }
+    
+    // Get user data
+    const user = getUserData();
+    setUserData(user);
+  }, [navigate]);
 
   const downloadCertificate = (index) => {
     const certificateElement = document.getElementById(`certificate-${index}`);
@@ -35,6 +50,12 @@ function Certificates() {
       alert(`No email found for ${name}`);
       return;
     }
+    
+    if (!userData || !userData.id) {
+      alert("User session not found. Please log in again.");
+      navigate('/login');
+      return;
+    }
 
     const certificateElement = document.getElementById(`certificate-${index}`);
     const canvas = await html2canvas(certificateElement);
@@ -46,6 +67,7 @@ function Certificates() {
         name,
         eventTitle,
         imageData,
+        userId: userData.id // Include userId for tracking
       });
 
       setEmailCount((prevCount) => prevCount + 1);

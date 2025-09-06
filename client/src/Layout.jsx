@@ -97,6 +97,25 @@ function Layout() {
                 </Link>
                 
                 <Link 
+                  to="/dashboard" 
+                  className="text-decoration-none px-3 py-2 rounded d-flex align-items-center" 
+                  style={{ 
+                    color: isActive("/dashboard") ? "#ffffff" : "#e0e7ff",
+                    fontWeight: "500",
+                    backgroundColor: isActive("/dashboard") ? "rgba(255, 255, 255, 0.15)" : "transparent",
+                    transition: "all 0.3s ease"
+                  }}
+                  onMouseOver={(e) => {
+                    if (!isActive("/dashboard")) e.target.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+                  }}
+                  onMouseOut={(e) => {
+                    if (!isActive("/dashboard")) e.target.style.backgroundColor = "transparent";
+                  }}
+                >
+                  <FaAward className="me-1" /> Dashboard
+                </Link>
+                
+                <Link 
                   to="/certificates" 
                   className="text-decoration-none px-3 py-2 rounded d-flex align-items-center" 
                   style={{ 
