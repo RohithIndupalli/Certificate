@@ -70,7 +70,7 @@ function Home() {
       }}
     >
       {/* User welcome section */}
-      {user && (
+      {/* {user && (
         <div className="mb-4 p-3 bg-white rounded shadow-sm w-100" style={{ maxWidth: "800px" }}>
           <div className="d-flex justify-content-between align-items-center">
             <div>
@@ -96,7 +96,7 @@ function Home() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
       {/* Title Section */}
       <h2 className="fw-bold text-center mb-4" style={{ color: "#333" }}>
         <FaFileSignature className="me-2" /> Online Certificate Generator
