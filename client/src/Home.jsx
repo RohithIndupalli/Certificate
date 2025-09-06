@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaFileCsv, FaImage, FaFileSignature, FaArrowRight, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { useNavigate, Link } from "react-router-dom";
+import { FaFileCsv, FaImage, FaFileSignature, FaArrowRight, FaUser, FaSignOutAlt, FaAward } from "react-icons/fa";
 import { getUserData, clearUserSession } from "./utils/authUtils";
 
 function Home() {
@@ -80,12 +80,20 @@ function Home() {
               </h4>
               <p className="text-muted mb-0">Logged in as: {user.email}</p>
             </div>
-            <button 
-              onClick={handleLogout}
-              className="btn btn-outline-danger"
-            >
-              Logout
-            </button>
+            <div>
+              <Link 
+                to="/certificates" 
+                className="btn btn-primary me-2 d-inline-flex align-items-center"
+              >
+                <FaAward className="me-2" /> View Certificates
+              </Link>
+              <button 
+                onClick={handleLogout}
+                className="btn btn-outline-danger d-inline-flex align-items-center"
+              >
+                <FaSignOutAlt className="me-2" /> Logout
+              </button>
+            </div>
           </div>
         </div>
       )}

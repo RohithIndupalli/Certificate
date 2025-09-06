@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import html2canvas from "html2canvas";
 import axios from "axios";
+import { FaHome } from "react-icons/fa";
 
 function Certificates() {
   const location = useLocation();
@@ -73,7 +74,12 @@ function Certificates() {
 
   return (
     <div className={`container mt-5 ${showPopup ? "dim-background" : ""}`}>
-      <h1 className="text-center text-primary fw-bold">Generated Certificates</h1>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="text-primary fw-bold mb-0">Generated Certificates</h1>
+        <Link to="/home" className="btn btn-outline-primary d-flex align-items-center">
+          <FaHome className="me-2" /> Back to Home
+        </Link>
+      </div>
 
       <div className="text-center mb-4">
         <button onClick={sendAllEmails} className="btn btn-warning" disabled={loading}>
