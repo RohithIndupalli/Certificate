@@ -33,10 +33,26 @@
 // export default Layout;
 
 
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { isAuthenticated, clearUserSession } from "./utils/authUtils";
+import { FaSignOutAlt, FaHome, FaAward } from "react-icons/fa";
 
 function Layout() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [authenticated, setAuthenticated] = useState(false);
+  
+  useEffect(() => {
+    // Check authentication status on component mount and route changes
+    setAuthenticated(isAuthenticated());
+  }, [location.pathname]);
+  
+  const handleLogout = () => {
+    clearUserSession();
+    setAuthenticated(false);
+    navigate('/login');
+  };
   
   // Function to check if link is active
   const isActive = (path) => {
@@ -58,63 +74,130 @@ function Layout() {
           </div>
           
           <nav className="d-flex gap-2">
-            <Link 
-              to="/" 
-              className="text-decoration-none px-3 py-2 rounded" 
-              style={{ 
-                color: isActive("/") ? "#ffffff" : "#e0e7ff",
-                fontWeight: "500",
-                backgroundColor: isActive("/") ? "rgba(255, 255, 255, 0.15)" : "transparent",
-                transition: "all 0.3s ease"
-              }}
-              onMouseOver={(e) => {
-                if (!isActive("/")) e.target.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
-              }}
-              onMouseOut={(e) => {
-                if (!isActive("/")) e.target.style.backgroundColor = "transparent";
-              }}
-            >
-              Home
-            </Link>
-            
-            <Link 
-              to="/register" 
-              className="text-decoration-none px-3 py-2 rounded" 
-              style={{ 
-                color: isActive("/register") ? "#ffffff" : "#e0e7ff",
-                fontWeight: "500",
-                backgroundColor: isActive("/register") ? "rgba(255, 255, 255, 0.15)" : "transparent",
-                transition: "all 0.3s ease"
-              }}
-              onMouseOver={(e) => {
-                if (!isActive("/register")) e.target.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
-              }}
-              onMouseOut={(e) => {
-                if (!isActive("/register")) e.target.style.backgroundColor = "transparent";
-              }}
-            >
-              Sign Up
-            </Link>
-            
-            <Link 
-              to="/login" 
-              className="text-decoration-none px-3 py-2 rounded-pill" 
-              style={{ 
-                color: "#3a6ea5",
-                backgroundColor: "#ffffff",
-                fontWeight: "600",
-                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-                transition: "all 0.3s ease"
-              }}
-              onMouseOver={(e) => {
-                e.target.style.backgroundColor = "#f8f9fa";
-              }}
-              onMouseOut={(e) => {
-                e.target.style.backgroundColor = "#ffffff";
-              }}
-            >
-              Login
-            </Link>
+            {authenticated ? (
+              // Navigation for authenticated users
+              <>
+                <Link 
+                  to="/home" 
+                  className="text-decoration-none px-3 py-2 rounded d-flex align-items-center" 
+                  style={{ 
+                    color: isActive("/home") ? "#ffffff" : "#e0e7ff",
+                    fontWeight: "500",
+                    backgroundColor: isActive("/home") ? "rgba(255, 255, 255, 0.15)" : "transparent",
+                    transition: "all 0.3s ease"
+                  }}
+                  onMouseOver={(e) => {
+                    if (!isActive("/home")) e.target.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+                  }}
+                  onMouseOut={(e) => {
+                    if (!isActive("/home")) e.target.style.backgroundColor = "transparent";
+                  }}
+                >
+                  <FaHome className="me-1" /> Home
+                </Link>
+                
+                <Link 
+                  to="/certificates" 
+                  className="text-decoration-none px-3 py-2 rounded d-flex align-items-center" 
+                  style={{ 
+                    color: isActive("/certificates") ? "#ffffff" : "#e0e7ff",
+                    fontWeight: "500",
+                    backgroundColor: isActive("/certificates") ? "rgba(255, 255, 255, 0.15)" : "transparent",
+                    transition: "all 0.3s ease"
+                  }}
+                  onMouseOver={(e) => {
+                    if (!isActive("/certificates")) e.target.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+                  }}
+                  onMouseOut={(e) => {
+                    if (!isActive("/certificates")) e.target.style.backgroundColor = "transparent";
+                  }}
+                >
+                  <FaAward className="me-1" /> Certificates
+                </Link>
+                
+                <button 
+                  onClick={handleLogout}
+                  className="text-decoration-none px-3 py-2 rounded-pill border-0 d-flex align-items-center" 
+                  style={{ 
+                    color: "#3a6ea5",
+                    backgroundColor: "#ffffff",
+                    fontWeight: "600",
+                    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                    transition: "all 0.3s ease",
+                    cursor: "pointer"
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = "#f8f9fa";
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = "#ffffff";
+                  }}
+                >
+                  <FaSignOutAlt className="me-1" /> Logout
+                </button>
+              </>
+            ) : (
+              // Navigation for non-authenticated users
+              <>
+                <Link 
+                  to="/" 
+                  className="text-decoration-none px-3 py-2 rounded" 
+                  style={{ 
+                    color: isActive("/") ? "#ffffff" : "#e0e7ff",
+                    fontWeight: "500",
+                    backgroundColor: isActive("/") ? "rgba(255, 255, 255, 0.15)" : "transparent",
+                    transition: "all 0.3s ease"
+                  }}
+                  onMouseOver={(e) => {
+                    if (!isActive("/")) e.target.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+                  }}
+                  onMouseOut={(e) => {
+                    if (!isActive("/")) e.target.style.backgroundColor = "transparent";
+                  }}
+                >
+                  Home
+                </Link>
+                
+                <Link 
+                  to="/register" 
+                  className="text-decoration-none px-3 py-2 rounded" 
+                  style={{ 
+                    color: isActive("/register") ? "#ffffff" : "#e0e7ff",
+                    fontWeight: "500",
+                    backgroundColor: isActive("/register") ? "rgba(255, 255, 255, 0.15)" : "transparent",
+                    transition: "all 0.3s ease"
+                  }}
+                  onMouseOver={(e) => {
+                    if (!isActive("/register")) e.target.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+                  }}
+                  onMouseOut={(e) => {
+                    if (!isActive("/register")) e.target.style.backgroundColor = "transparent";
+                  }}
+                >
+                  Sign Up
+                </Link>
+                
+                <Link 
+                  to="/login" 
+                  className="text-decoration-none px-3 py-2 rounded-pill" 
+                  style={{ 
+                    color: "#3a6ea5",
+                    backgroundColor: "#ffffff",
+                    fontWeight: "600",
+                    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                    transition: "all 0.3s ease"
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = "#f8f9fa";
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = "#ffffff";
+                  }}
+                >
+                  Login
+                </Link>
+              </>
+            )}
           </nav>
         </div>
       </header>
