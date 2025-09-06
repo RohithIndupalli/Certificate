@@ -102,9 +102,9 @@ function Dashboard() {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="text-primary fw-bold mb-0">Certificate Dashboard</h1>
-        <Link to="/home" className="btn btn-outline-primary d-flex align-items-center">
+        {/* <Link to="/home" className="btn btn-outline-primary d-flex align-items-center">
           <FaHome className="me-2" /> Back to Home
-        </Link>
+        </Link> */}
       </div>
       
       {/* Filters */}
