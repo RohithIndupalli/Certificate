@@ -114,6 +114,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
+import { setUserSession } from "./utils/authUtils";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -137,9 +138,9 @@ function Login() {
       if (response.data && response.data.success) {
         console.log("Login successful:", response.data);
         
-        // Store user details in localStorage for use across the app
+        // Store user details using the setUserSession utility
         if (response.data.user) {
-          localStorage.setItem('user', JSON.stringify(response.data.user));
+          setUserSession(response.data.user);
         }
         
         // Redirect to Home page

@@ -1,272 +1,3 @@
-// import React from "react";
-// import { useLocation } from "react-router-dom";
-// import html2canvas from "html2canvas";
-
-// function Certificates() {
-//   const location = useLocation();
-//   const { participants, template, eventTitle } = location.state || { participants: [], template: null, eventTitle: "" };
-
-//   const downloadCertificate = (index) => {
-//     const certificateElement = document.getElementById(`certificate-${index}`);
-//     html2canvas(certificateElement).then((canvas) => {
-//       const link = document.createElement("a");
-//       link.href = canvas.toDataURL("image/png");
-//       link.download = `certificate_${index + 1}.png`;
-//       link.click();
-//     });
-//   };
-
-//   const sendEmail = (index) => {
-//     const participant = participants[index];
-//     const name = participant[0] || "Unknown";
-//     const email = participant[1] || ""; // Assuming the second column contains emails
-
-//     if (!email) {
-//       alert(`No email found for ${name}`);
-//       return;
-//     }
-
-//     const subject = `Certificate of Participation - ${eventTitle}`;
-//     const body = `Dear ${name},%0D%0A%0D%0ACongratulations! Please find your participation certificate for "${eventTitle}".%0D%0A%0D%0APlease download your certificate and attach it manually before sending.%0D%0A%0D%0ABest Regards,%0D%0AEvent Team`;
-
-//     window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-//   };
-
-//   return (
-//     <div className="container mt-5">
-//       <h1 className="text-center text-primary fw-bold">Generated Certificates</h1>
-//       <div className="row">
-//         {participants.map((participant, index) => (
-//           <div key={index} className="col-md-6 d-flex flex-column align-items-center">
-//             <div
-//               id={`certificate-${index}`}
-//               className="certificate-container text-center"
-//               style={{
-//                 position: "relative",
-//                 width: "600px",
-//                 height: "400px",
-//                 border: "1px solid black",
-//                 margin: "20px 0",
-//                 backgroundColor: "#fff",
-//               }}
-//             >
-//               <img
-//                 src={template}
-//                 alt="Certificate Template"
-//                 style={{ width: "100%", height: "100%", position: "absolute", top: "0", left: "0" }}
-//               />
-//               <h2
-//                 style={{
-//                   position: "absolute",
-//                   top: "32%",
-//                   left: "50%",
-//                   transform: "translateX(-50%)",
-//                   fontSize: "24px",
-//                   color: "gold",
-//                   fontFamily: "Times New Roman",
-//                   fontWeight: "bold",
-//                 }}
-//               >
-//                 {eventTitle}
-//               </h2>
-//               <h3
-//                 style={{
-//                   position: "absolute",
-//                   top: "52%",
-//                   left: "50%",
-//                   transform: "translate(-50%, -50%)",
-//                   fontSize: "30px",
-//                   color: "gold",
-//                   fontFamily: "Times New Roman",
-//                   fontWeight: "bold",
-//                 }}
-//               >
-//                 {participant[0] ? participant[0] : "Unknown"}
-//               </h3>
-//               <h4
-//                 style={{
-//                   position: "absolute",
-//                   top: "70%",
-//                   left: "50%",
-//                   transform: "translateX(-50%)",
-//                   fontSize: "18px",
-//                   color: "black",
-//                   fontFamily: "Times New Roman",
-//                 }}
-//               >
-//                 This is to certify your excellence in showing at the VIGNAN MAHOTSAV.
-//               </h4>
-//             </div>
-
-//             <button
-//               onClick={() => downloadCertificate(index)}
-//               className="btn btn-success mt-3"
-//               style={{
-//                 width: "150px",
-//                 fontSize: "14px",
-//               }}
-//             >
-//               Download
-//             </button>
-
-//             <button
-//               onClick={() => sendEmail(index)}
-//               className="btn btn-info mt-2"
-//               style={{
-//                 width: "150px",
-//                 fontSize: "14px",
-//               }}
-//             >
-//               Send Email
-//             </button>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Certificates;
-
-
-// import React from "react";
-// import { useLocation } from "react-router-dom";
-// import html2canvas from "html2canvas";
-// import axios from "axios";
-
-// function Certificates() {
-//   const location = useLocation();
-//   const { participants, template, eventTitle } = location.state || { participants: [], template: null, eventTitle: "" };
-
-//   const downloadCertificate = (index) => {
-//     const certificateElement = document.getElementById(`certificate-${index}`);
-//     html2canvas(certificateElement).then((canvas) => {
-//       const link = document.createElement("a");
-//       link.href = canvas.toDataURL("image/png");
-//       link.download = `certificate_${index + 1}.png`;
-//       link.click();
-//     });
-//   };
-
-//   const sendEmail = async (index) => {
-//     const participant = participants[index];
-//     const name = participant[0] || "Unknown";
-//     const email = participant[1] || "";
-
-//     if (!email) {
-//       alert(`No email found for ${name}`);
-//       return;
-//     }
-
-//     // Capture certificate as an image
-//     const certificateElement = document.getElementById(`certificate-${index}`);
-//     html2canvas(certificateElement).then(async (canvas) => {
-//       const imageData = canvas.toDataURL("image/png"); // Convert to Base64
-
-//       try {
-//         await axios.post("http://localhost:3001/send-email", {
-//           email,
-//           name,
-//           eventTitle,
-//           imageData,
-//         });
-
-//         alert(`Certificate sent to ${email}`);
-//       } catch (error) {
-//         console.error("Error sending email:", error);
-//         alert("Failed to send email.");
-//       }
-//     });
-//   };
-
-//   return (
-//     <div className="container mt-5">
-//       <h1 className="text-center text-primary fw-bold">Generated Certificates</h1>
-//       <div className="text-center mb-4">
-//         <button onClick={() => participants.forEach((_, i) => sendEmail(i))} className="btn btn-warning">
-//           Send All Emails
-//         </button>
-//       </div>
-//       <div className="row">
-//         {participants.map((participant, index) => (
-//           <div key={index} className="col-md-6 d-flex flex-column align-items-center">
-//             <div
-//               id={`certificate-${index}`}
-//               className="certificate-container text-center"
-//               style={{
-//                 position: "relative",
-//                 width: "600px",
-//                 height: "400px",
-//                 border: "1px solid black",
-//                 margin: "20px 0",
-//                 backgroundColor: "#fff",
-//               }}
-//             >
-//               <img
-//                 src={template}
-//                 alt="Certificate Template"
-//                 style={{ width: "100%", height: "100%", position: "absolute", top: "0", left: "0" }}
-//               />
-//               <h2
-//                 style={{
-//                   position: "absolute",
-//                   top: "32%",
-//                   left: "50%",
-//                   transform: "translateX(-50%)",
-//                   fontSize: "24px",
-//                   color: "gold",
-//                   fontFamily: "Times New Roman",
-//                   fontWeight: "bold",
-//                 }}
-//               >
-//                 {eventTitle}
-//               </h2>
-//               <h3
-//                 style={{
-//                   position: "absolute",
-//                   top: "52%",
-//                   left: "50%",
-//                   transform: "translate(-50%, -50%)",
-//                   fontSize: "30px",
-//                   color: "gold",
-//                   fontFamily: "Times New Roman",
-//                   fontWeight: "bold",
-//                 }}
-//               >
-//                 {participant[0] ? participant[0] : "Unknown"}
-//               </h3>
-//               <h4
-//                 style={{
-//                   position: "absolute",
-//                   top: "70%",
-//                   left: "50%",
-//                   transform: "translateX(-50%)",
-//                   fontSize: "18px",
-//                   color: "black",
-//                   fontFamily: "Times New Roman",
-//                 }}
-//               >
-//                 This is to certify your excellence in showing at the VIGNAN MAHOTSAV held on 6,7,8 Feb 2025.
-//               </h4>
-//             </div>
-
-//             <button onClick={() => downloadCertificate(index)} className="btn btn-success mt-3">
-//               Download
-//             </button>
-
-//             <button onClick={() => sendEmail(index)} className="btn btn-info mt-2">
-//               Send Email
-//             </button>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Certificates;
-
-
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import html2canvas from "html2canvas";
@@ -320,9 +51,7 @@ function Certificates() {
 
       if (!isBulk) {
         setShowPopup(true);
-        setTimeout(() => {
-          setShowPopup(false);
-        }, 5000);
+        setTimeout(() => setShowPopup(false), 5000);
       }
     } catch (error) {
       console.error("Error sending email:", error);
@@ -330,24 +59,22 @@ function Certificates() {
   };
 
   const sendAllEmails = async () => {
-    setEmailCount(0); // Reset count before sending
-    setLoading(true); // Show loading animation
+    setEmailCount(0);
+    setLoading(true);
 
     for (let i = 0; i < participants.length; i++) {
-      await sendEmail(i, true); // Wait for each email to be sent
+      await sendEmail(i, true);
     }
 
-    setLoading(false); // Hide loading animation
-    setShowPopup(true); // Show success popup
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 5000);
+    setLoading(false);
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 5000);
   };
 
   return (
     <div className={`container mt-5 ${showPopup ? "dim-background" : ""}`}>
       <h1 className="text-center text-primary fw-bold">Generated Certificates</h1>
-      
+
       <div className="text-center mb-4">
         <button onClick={sendAllEmails} className="btn btn-warning" disabled={loading}>
           {loading ? "Sending..." : "Send All Emails"}
@@ -379,7 +106,13 @@ function Certificates() {
               <img
                 src={template}
                 alt="Certificate Template"
-                style={{ width: "100%", height: "100%", position: "absolute", top: "0", left: "0" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  position: "absolute",
+                  top: "0",
+                  left: "0",
+                }}
               />
               <h2
                 style={{
@@ -424,11 +157,19 @@ function Certificates() {
               </h4>
             </div>
 
-            <button onClick={() => downloadCertificate(index)} className="btn btn-success mt-3">
+            <button
+              onClick={() => downloadCertificate(index)}
+              className="btn btn-success mt-3"
+              disabled={loading}
+            >
               Download
             </button>
 
-            <button onClick={() => sendEmail(index)} className="btn btn-info mt-2" disabled={loading}>
+            <button
+              onClick={() => sendEmail(index)}
+              className="btn btn-info mt-2"
+              disabled={loading}
+            >
               Send Email
             </button>
           </div>

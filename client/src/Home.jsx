@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaFileCsv, FaImage, FaFileSignature, FaArrowRight, FaUser } from "react-icons/fa";
+import { FaFileCsv, FaImage, FaFileSignature, FaArrowRight, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { getUserData, clearUserSession } from "./utils/authUtils";
 
 function Home() {
   const [participants, setParticipants] = useState([]);
@@ -12,10 +13,10 @@ function Home() {
   
   // Check if user is logged in
   useEffect(() => {
-    const loggedInUser = localStorage.getItem('user');
+    // Check if user is logged in using auth utilities
+    const loggedInUser = getUserData();
     if (loggedInUser) {
-      const foundUser = JSON.parse(loggedInUser);
-      setUser(foundUser);
+      setUser(loggedInUser);
     } else {
       // Redirect to login if not logged in
       navigate('/login');
@@ -52,8 +53,8 @@ function Home() {
   };
 
   const handleLogout = () => {
-    // Clear user data from localStorage
-    localStorage.removeItem('user');
+    // Clear user session using auth utilities
+    clearUserSession();
     // Redirect to login page
     navigate('/login');
   };
