@@ -36,20 +36,23 @@ import Layout from './Layout';
 import Home from './Home';
 import Certificates from './Certificates';
 import FirstPage from './FirstPage';
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* FirstPage is independent and does NOT use Layout */}
+        {/* Public routes */}
         <Route path="/" element={<FirstPage />} />
-
-        {/* All other pages are wrapped inside Layout */}
         <Route path="/" element={<Layout />}>
           <Route path="register" element={<Signup />} />
           <Route path="login" element={<Login />} />
-          <Route path="home" element={<Home />} />
-          <Route path="certificates" element={<Certificates />} />
+          
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="home" element={<Home />} />
+            <Route path="certificates" element={<Certificates />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
