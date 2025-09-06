@@ -35,6 +35,7 @@ import Login from './Login';
 import Layout from './Layout';
 import Home from './Home';
 import Certificates from './Certificates';
+import Dashboard from './Dashboard';
 import FirstPage from './FirstPage';
 import ProtectedRoute from './ProtectedRoute';
 
@@ -52,6 +53,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="home" element={<Home />} />
             <Route path="certificates" element={<Certificates />} />
+            <Route path="dashboard" element={<Dashboard />} />
           </Route>
         </Route>
       </Routes>
